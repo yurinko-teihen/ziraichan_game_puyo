@@ -670,12 +670,20 @@ class Renderer {
       ctx.fillText(String(i + 1), bx + buttonWidth / 2, by + 80);
     }
 
-    // 操作説明 / Controls
+    // 操作説明 / Controls (PC & モバイル対応)
     ctx.fillStyle = '#888';
     ctx.font = '13px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('← → : 移動　↑ : 回転　↓ : 高速落下　Space : ハードドロップ', w / 2, h * 0.85);
-    ctx.fillText('数字キー 1-5 でキャラ選択 / クリックでも選択可能', w / 2, h * 0.9);
+
+    // モバイル判定 / Detect mobile
+    const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isMobile) {
+      ctx.fillText('キャラクターをタップして選択！', w / 2, h * 0.85);
+      ctx.fillText('画面下のボタンで操作できるよ', w / 2, h * 0.9);
+    } else {
+      ctx.fillText('← → : 移動　↑ : 回転　↓ : 高速落下　Space : ハードドロップ', w / 2, h * 0.85);
+      ctx.fillText('数字キー 1-5 でキャラ選択 / クリックでも選択可能', w / 2, h * 0.9);
+    }
   }
 
   /**
@@ -710,7 +718,7 @@ class Renderer {
 
     ctx.fillStyle = '#aaa';
     ctx.font = '16px sans-serif';
-    ctx.fillText('Enterキーでリトライ / タイトルに戻る', w / 2, h * 0.8);
+    ctx.fillText('Enterキー / タップでタイトルに戻る', w / 2, h * 0.8);
   }
 
   /**
@@ -749,7 +757,7 @@ class Renderer {
 
     ctx.fillStyle = '#aaa';
     ctx.font = '16px sans-serif';
-    ctx.fillText('Enterキーでタイトルに戻る', w / 2, h * 0.85);
+    ctx.fillText('Enterキー / タップでタイトルに戻る', w / 2, h * 0.85);
   }
 
   /**

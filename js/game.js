@@ -149,12 +149,13 @@ class Game {
     const charKeys = Object.keys(CONSTANTS.CHARACTERS);
     for (let i = 0; i < charKeys.length; i++) {
       if (this.input.isJustPressed([String(i + 1)])) {
+        this.input.getTouchAction(); // 未消費のタッチアクションをクリア
         this.startGame(charKeys[i]);
         return;
       }
     }
 
-    // マウスクリックでキャラ選択
+    // マウスクリック/タッチタップでキャラ選択
     const click = this.input.getMouseClick();
     if (click) {
       const w = this.renderer.canvas.width;
@@ -168,11 +169,15 @@ class Game {
         const bx = startX + i * (buttonWidth + 10);
         if (click.x >= bx && click.x <= bx + buttonWidth &&
             click.y >= by && click.y <= by + 100) {
+          this.input.getTouchAction(); // 未消費のタッチアクションをクリア
           this.startGame(charKeys[i]);
           return;
         }
       }
     }
+
+    // タイトル画面ではタッチアクションを消費して次画面に持ち越さない
+    this.input.getTouchAction();
   }
 
   /**
@@ -507,6 +512,14 @@ class Game {
    */
   _updateEndScreen() {
     if (this.input.isJustPressed(['Enter'])) {
+      this.state = CONSTANTS.STATE.TITLE;
+      return;
+    }
+
+    // タッチタップ/クリックでもタイトルに戻る
+    const click = this.input.getMouseClick();
+    const touchAction = this.input.getTouchAction();
+    if (click || touchAction) {
       this.state = CONSTANTS.STATE.TITLE;
     }
   }
