@@ -51,7 +51,8 @@ class InputHandler {
           const threshold = 30;
 
           if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) {
-            // タップ = 回転（ゲーム中）& クリック扱い（タイトル/終了画面用）
+            // タップ = ゲーム中は回転、タイトル/終了画面ではクリック扱い
+            // touchAction はゲーム中のみ使用、mouseClickPos は画面選択に使用
             this.touchAction = 'rotate';
             // タッチタップをクリックとしても処理 / Treat touch tap as click
             const rect = canvas.getBoundingClientRect();

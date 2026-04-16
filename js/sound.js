@@ -20,7 +20,7 @@ class SoundManager {
     }
     // モバイルブラウザではユーザー操作後にresumeが必要 / Resume for mobile browsers
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => { /* ignore resume errors */ });
     }
     return this.ctx;
   }
