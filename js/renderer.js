@@ -464,8 +464,9 @@ class Renderer {
    * @param {number} score
    * @param {number} combo
    * @param {number} level
+   * @param {number} scoreLoss - 実際のスコア減少量
    */
-  drawScore(score, combo, level) {
+  drawScore(score, combo, level, scoreLoss = 0) {
     const ctx = this.ctx;
     const x = this.boardX + CONSTANTS.COLS * this.cellSize + 20;
     const y = this.boardY + 220;
@@ -495,7 +496,7 @@ class Renderer {
 
       ctx.fillStyle = '#ff8a80';
       ctx.font = 'bold 12px sans-serif';
-      ctx.fillText(`-${(combo * CONSTANTS.BASE_SCORE_LOSS * combo).toLocaleString()}pts`, boardCenterX, this.boardY - 25);
+      ctx.fillText(`-${scoreLoss.toLocaleString()}pts`, boardCenterX, this.boardY - 25);
     }
   }
 

@@ -18,6 +18,7 @@ class Game {
     this.linesCleared = 0;
     this.combo = 0;
     this.totalBlocksCleared = 0;
+    this.lastScoreLoss = 0;
     this.selectedCharacter = null;
     this.isPaused = false;
 
@@ -79,6 +80,7 @@ class Game {
     this.linesCleared = 0;
     this.combo = 0;
     this.totalBlocksCleared = 0;
+    this.lastScoreLoss = 0;
     this.dropInterval = CONSTANTS.INITIAL_DROP_INTERVAL;
     this.isPaused = false;
     this.isAnimatingClear = false;
@@ -395,6 +397,7 @@ class Game {
       const colorBonus = uniqueColors.size > 1 ? uniqueColors.size : 1;
       const scoreLoss = totalBlocks * CONSTANTS.BASE_SCORE_LOSS * this.combo * colorBonus;
       this.score = Math.max(0, this.score - scoreLoss);
+      this.lastScoreLoss = scoreLoss;
       this.totalBlocksCleared += totalBlocks;
 
       // レベルアップ
@@ -534,7 +537,7 @@ class Game {
         r.drawFlash();
         r.ctx.restore();
         r.drawNext(this.pieceGenerator ? this.pieceGenerator.peekNext() : []);
-        r.drawScore(this.score, this.combo, this.level);
+        r.drawScore(this.score, this.combo, this.level, this.lastScoreLoss);
         r.drawFillMeter(this.board.getFillRatio());
         r.drawCharacterInfo(this.selectedCharacter);
 
