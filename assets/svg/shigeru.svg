@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- しげる (Shigeru) - 入れ歯型ブロック / Denture-shaped block -->
+  <defs>
+    <style>
+      .shigeru-body { fill: var(--block-color, #4caf50); }
+      .shigeru-gum { fill: #e91e63; }
+      .shigeru-tooth { fill: #fff; }
+      .shigeru-eye { fill: #333; }
+    </style>
+  </defs>
+  <!-- 入れ歯の形（上顎） / Denture shape (upper) -->
+  <path class="shigeru-body" d="M8 28 Q8 12 32 10 Q56 12 56 28 L52 32 L12 32 Z"/>
+  <path d="M8 28 Q8 12 32 10 Q56 12 56 28 L52 32 L12 32 Z" fill="none" stroke="#333" stroke-width="1.5"/>
+  <!-- 歯茎 / Gums -->
+  <path class="shigeru-gum" d="M12 28 Q12 20 32 18 Q52 20 52 28 L50 32 L14 32 Z" opacity="0.6"/>
+  <!-- 歯 / Teeth -->
+  <rect class="shigeru-tooth" x="16" y="26" width="5" height="8" rx="1"/>
+  <rect class="shigeru-tooth" x="22" y="26" width="5" height="8" rx="1"/>
+  <rect class="shigeru-tooth" x="28" y="26" width="5" height="8" rx="1"/>
+  <rect class="shigeru-tooth" x="34" y="26" width="5" height="8" rx="1"/>
+  <rect class="shigeru-tooth" x="40" y="26" width="5" height="8" rx="1"/>
+  <rect class="shigeru-tooth" x="46" y="26" width="4" height="8" rx="1"/>
+  <!-- 入れ歯の形（下顎） / Denture shape (lower) -->
+  <path class="shigeru-body" d="M10 36 L54 36 Q54 52 32 54 Q10 52 10 36 Z"/>
+  <path d="M10 36 L54 36 Q54 52 32 54 Q10 52 10 36 Z" fill="none" stroke="#333" stroke-width="1.5"/>
+  <!-- 下の歯 / Lower teeth -->
+  <rect class="shigeru-tooth" x="16" y="34" width="5" height="7" rx="1"/>
+  <rect class="shigeru-tooth" x="22" y="34" width="5" height="7" rx="1"/>
+  <rect class="shigeru-tooth" x="28" y="34" width="5" height="7" rx="1"/>
+  <rect class="shigeru-tooth" x="34" y="34" width="5" height="7" rx="1"/>
+  <rect class="shigeru-tooth" x="40" y="34" width="5" height="7" rx="1"/>
+  <rect class="shigeru-tooth" x="46" y="34" width="4" height="7" rx="1"/>
+  <!-- 顔要素 (入れ歯の上に小さい目) / Face elements -->
+  <circle class="shigeru-eye" cx="24" cy="16" r="2"/>
+  <circle class="shigeru-eye" cx="40" cy="16" r="2"/>
+  <!-- にやり / Smirk (the denture IS the mouth) -->
+</svg>

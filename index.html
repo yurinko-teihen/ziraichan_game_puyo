@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>地雷ちゃんパズル ～底辺ぷよぷよ～</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- OGP / SNS共有用 -->
+  <meta property="og:title" content="地雷ちゃんパズル ～底辺ぷよぷよ～">
+  <meta property="og:description" content="底辺キャラクターたちのパズルゲーム。ルールは自分で見つけろ！">
+  <meta property="og:type" content="website">
+</head>
+<body>
+  <div id="gameContainer">
+    <!-- コントロールバー / Control bar -->
+    <div id="controlBar">
+      <span class="game-title">地雷ちゃんパズル</span>
+      <button id="soundToggle">🔊 Sound ON</button>
+    </div>
+
+    <!-- ゲームキャンバス / Game canvas -->
+    <canvas id="gameCanvas" width="520" height="660"></canvas>
+
+    <!-- モバイルコントロール / Mobile controls -->
+    <div id="mobileControls">
+      <div class="control-row">
+        <button id="btnRotate">🔄</button>
+      </div>
+      <div class="control-row">
+        <button id="btnLeft">⬅️</button>
+        <button id="btnDown">⬇️</button>
+        <button id="btnRight">➡️</button>
+      </div>
+      <div class="control-row">
+        <button id="btnDrop" class="btn-wide">⏬ DROP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/constants.js"></script>
+  <script src="js/block.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

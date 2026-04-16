@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 基地ガイブロック / Kichigai special block -->
+  <defs>
+    <style>
+      .kichi-body { fill: #666; }
+      .kichi-outline { stroke: #ff0; stroke-width: 2; fill: none; }
+      .kichi-eye { fill: #ff0; }
+      .kichi-crack { stroke: #ff0; stroke-width: 1.5; fill: none; }
+    </style>
+  </defs>
+  <!-- 不安定な形 / Unstable shape -->
+  <rect class="kichi-body" x="6" y="6" width="52" height="52" rx="4"/>
+  <rect class="kichi-outline" x="6" y="6" width="52" height="52" rx="4"/>
+  <!-- ヒビ / Cracks -->
+  <path class="kichi-crack" d="M16 6 L22 20 L18 34 L24 48 L20 58"/>
+  <path class="kichi-crack" d="M44 6 L38 18 L44 30 L40 44 L46 58"/>
+  <path class="kichi-crack" d="M6 22 L18 26 L30 20 L42 28 L58 24"/>
+  <!-- 狂気の目 / Crazy eyes -->
+  <circle class="kichi-eye" cx="22" cy="32" r="6"/>
+  <circle cx="22" cy="32" r="3" fill="#333"/>
+  <circle cx="22" cy="32" r="1" fill="#ff0"/>
+  <circle class="kichi-eye" cx="42" cy="32" r="6"/>
+  <circle cx="42" cy="32" r="3" fill="#333"/>
+  <circle cx="42" cy="32" r="1" fill="#ff0"/>
+  <!-- 狂った口 / Crazy mouth -->
+  <path d="M20 44 L26 40 L32 46 L38 40 L44 44" fill="none" stroke="#ff0" stroke-width="2"/>
+  <!-- ⚠マーク / Warning mark -->
+  <text x="32" y="18" text-anchor="middle" font-size="10" fill="#ff0">⚠</text>
+</svg>

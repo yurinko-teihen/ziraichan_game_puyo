@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 石ブロック（爆発しない） / Stone block (non-explodable) -->
+  <defs>
+    <style>
+      .stone-body { fill: #9e9e9e; }
+      .stone-line { stroke: #757575; stroke-width: 1; fill: none; }
+      .stone-highlight { fill: #bdbdbd; }
+    </style>
+  </defs>
+  <!-- 石の形 / Stone shape -->
+  <rect class="stone-body" x="4" y="4" width="56" height="56" rx="6"/>
+  <rect x="4" y="4" width="56" height="56" rx="6" fill="none" stroke="#616161" stroke-width="2"/>
+  <!-- 石のテクスチャ / Stone texture -->
+  <path class="stone-line" d="M10 20 L30 18 L54 22"/>
+  <path class="stone-line" d="M8 38 L24 42 L48 36 L58 40"/>
+  <path class="stone-line" d="M12 52 L36 48 L52 54"/>
+  <path class="stone-line" d="M20 8 L18 28 L22 50 L18 58"/>
+  <path class="stone-line" d="M42 6 L44 24 L40 46 L44 60"/>
+  <!-- ハイライト / Highlight -->
+  <rect class="stone-highlight" x="10" y="8" width="12" height="8" rx="2" opacity="0.4"/>
+</svg>

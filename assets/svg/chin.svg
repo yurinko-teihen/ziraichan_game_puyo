@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- チン (Chin) - キノコ型ブロック / Mushroom-shaped block -->
+  <defs>
+    <style>
+      .chin-cap { fill: var(--block-color, #9c27b0); }
+      .chin-stem { fill: #ffe0b2; }
+      .chin-spot { fill: #fff; opacity: 0.5; }
+      .chin-eye { fill: #333; }
+      .chin-mouth { fill: #333; }
+    </style>
+  </defs>
+  <!-- キノコの傘 / Mushroom cap -->
+  <path class="chin-cap" d="M4 34 Q4 8 32 6 Q60 8 60 34 Z"/>
+  <path d="M4 34 Q4 8 32 6 Q60 8 60 34 Z" fill="none" stroke="#333" stroke-width="1.5"/>
+  <!-- 傘の模様（水玉） / Cap spots -->
+  <circle class="chin-spot" cx="20" cy="18" r="5"/>
+  <circle class="chin-spot" cx="42" cy="16" r="4"/>
+  <circle class="chin-spot" cx="32" cy="24" r="3"/>
+  <circle class="chin-spot" cx="14" cy="28" r="3"/>
+  <circle class="chin-spot" cx="50" cy="26" r="3"/>
+  <!-- キノコの軸 / Mushroom stem -->
+  <path class="chin-stem" d="M20 34 L20 58 Q32 62 44 58 L44 34 Z"/>
+  <path d="M20 34 L20 58 Q32 62 44 58 L44 34 Z" fill="none" stroke="#333" stroke-width="1.5"/>
+  <!-- 顔 / Face -->
+  <circle class="chin-eye" cx="27" cy="42" r="2.5"/>
+  <circle class="chin-eye" cx="37" cy="42" r="2.5"/>
+  <!-- ジト目 / Deadpan eyes -->
+  <line x1="25" y1="42" x2="29" y2="42" stroke="#333" stroke-width="2"/>
+  <line x1="35" y1="42" x2="39" y2="42" stroke="#333" stroke-width="2"/>
+  <!-- 口 / Mouth -->
+  <path d="M28 48 Q32 52 36 48" fill="none" stroke="#333" stroke-width="1.5"/>
+</svg>

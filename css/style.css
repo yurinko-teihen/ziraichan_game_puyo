@@ -1,0 +1,142 @@
+/* =================================
+   地雷ちゃんパズルゲーム - スタイル
+   ================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0a1a;
+  font-family: 'Segoe UI', 'Hiragino Sans', 'MS Gothic', sans-serif;
+}
+
+#gameContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#gameCanvas {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 60px);
+  image-rendering: pixelated;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: #0f0f23;
+}
+
+/* コントロールバー / Control bar */
+#controlBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+  width: 100%;
+  max-width: 600px;
+}
+
+#controlBar button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ccc;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+#controlBar button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+#controlBar .game-title {
+  color: #ff4444;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* モバイルコントロール / Mobile controls */
+#mobileControls {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+}
+
+#mobileControls .control-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+#mobileControls button {
+  width: 60px;
+  height: 50px;
+  font-size: 22px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mobileControls button:active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#mobileControls .btn-wide {
+  width: 130px;
+}
+
+/* モバイル判定 / Mobile detection */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  #mobileControls {
+    display: block;
+  }
+
+  #gameCanvas {
+    max-height: calc(100vh - 180px);
+  }
+}
+
+/* アニメーション / Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.shake {
+  animation: shake 0.3s ease-in-out;
+}
+
+/* スクロールバー非表示 / Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
