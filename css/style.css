@@ -78,54 +78,10 @@ html, body {
   font-weight: bold;
 }
 
-/* モバイルコントロール / Mobile controls */
-#mobileControls {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 100;
-}
-
-#mobileControls .control-row {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 5px 0;
-}
-
-#mobileControls button {
-  width: 60px;
-  height: 50px;
-  font-size: 22px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
-  border-radius: 8px;
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-#mobileControls button:active {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-#mobileControls .btn-wide {
-  width: 130px;
-}
-
 /* モバイル判定 / Mobile detection */
 @media (max-width: 768px), (hover: none) and (pointer: coarse) {
-  #mobileControls {
-    display: block;
-  }
-
   #gameCanvas {
-    max-height: calc(100vh - 180px);
+    max-height: calc(100vh - 60px);
   }
 }
 
