@@ -18,6 +18,11 @@ class Renderer {
     this.shakeAmount = 0;
     this.flashAlpha = 0;
 
+    // マロブロック画像 / Maro block image
+    this.maroBlockImg = null;
+    this.maroBlockTinted = {};
+    this._loadMaroBlockImage();
+
     // ボード描画エリア / Board draw area
     this.boardX = 30;
     this.boardY = 60;
@@ -34,6 +39,60 @@ class Renderer {
     // シャッフルして背景テキストを配列に
     this.bgTexts = [...CONSTANTS.BG_CONVERSATIONS].sort(() => Math.random() - 0.5);
     this.bgTextIndex = 0;
+  }
+
+  /**
+   * マロブロック画像をロード / Load maro block image
+   * PNG or SVG画像を読み込み、各色の色付きバージョンを生成
+   */
+  _loadMaroBlockImage() {
+    const img = new Image();
+    img.onload = () => {
+      this.maroBlockImg = img;
+      this._generateTintedImages();
+    };
+    img.onerror = () => {
+      // PNG が無ければ SVG にフォールバック / Fallback to SVG if PNG not found
+      const svgImg = new Image();
+      svgImg.onload = () => {
+        this.maroBlockImg = svgImg;
+        this._generateTintedImages();
+      };
+      svgImg.src = 'assets/img/maro_block.svg';
+    };
+    img.src = 'assets/img/maro_block.png';
+  }
+
+  /**
+   * 各色の色付き画像を生成 / Generate tinted images for each color
+   * Canvas compositing で元画像に色を被せる
+   */
+  _generateTintedImages() {
+    if (!this.maroBlockImg) return;
+
+    const sizes = [this.cellSize, Math.round(this.cellSize * 0.8), Math.round(this.cellSize * 0.6)];
+
+    CONSTANTS.COLORS.forEach((color, index) => {
+      const canvas = document.createElement('canvas');
+      const size = Math.max(...sizes);
+      canvas.width = size;
+      canvas.height = size;
+      const tCtx = canvas.getContext('2d');
+
+      // 元画像を描画 / Draw original image
+      tCtx.drawImage(this.maroBlockImg, 0, 0, size, size);
+
+      // 色を被せる（multiply） / Overlay color (multiply blend)
+      tCtx.globalCompositeOperation = 'multiply';
+      tCtx.fillStyle = color.hex;
+      tCtx.fillRect(0, 0, size, size);
+
+      // 元画像の透明部分を復元 / Restore transparency from original
+      tCtx.globalCompositeOperation = 'destination-in';
+      tCtx.drawImage(this.maroBlockImg, 0, 0, size, size);
+
+      this.maroBlockTinted[index] = canvas;
+    });
   }
 
   /**
@@ -211,38 +270,45 @@ class Renderer {
       ctx.fillText('⚠', x + size / 2, y + size / 2);
     } else {
       // 通常ブロック / Normal block
-      // グラデーション / Gradient
-      const grad = ctx.createLinearGradient(x, y, x, y + size);
-      grad.addColorStop(0, color.hex);
-      grad.addColorStop(1, color.dark);
-      ctx.fillStyle = grad;
+      const tintedImg = this.maroBlockTinted[block.colorIndex];
+      if (tintedImg) {
+        // マロブロック画像で描画 / Draw with maro block image
+        ctx.drawImage(tintedImg, 0, 0, tintedImg.width, tintedImg.height,
+          x + padding, y + padding, size - padding * 2, size - padding * 2);
+      } else {
+        // フォールバック：従来の描画 / Fallback: legacy drawing
+        const grad = ctx.createLinearGradient(x, y, x, y + size);
+        grad.addColorStop(0, color.hex);
+        grad.addColorStop(1, color.dark);
+        ctx.fillStyle = grad;
 
-      // 角丸四角 / Rounded rect
-      const r = 6;
-      ctx.beginPath();
-      ctx.moveTo(x + padding + r, y + padding);
-      ctx.lineTo(x + size - padding - r, y + padding);
-      ctx.quadraticCurveTo(x + size - padding, y + padding, x + size - padding, y + padding + r);
-      ctx.lineTo(x + size - padding, y + size - padding - r);
-      ctx.quadraticCurveTo(x + size - padding, y + size - padding, x + size - padding - r, y + size - padding);
-      ctx.lineTo(x + padding + r, y + size - padding);
-      ctx.quadraticCurveTo(x + padding, y + size - padding, x + padding, y + size - padding - r);
-      ctx.lineTo(x + padding, y + padding + r);
-      ctx.quadraticCurveTo(x + padding, y + padding, x + padding + r, y + padding);
-      ctx.closePath();
-      ctx.fill();
+        // 角丸四角 / Rounded rect
+        const r = 6;
+        ctx.beginPath();
+        ctx.moveTo(x + padding + r, y + padding);
+        ctx.lineTo(x + size - padding - r, y + padding);
+        ctx.quadraticCurveTo(x + size - padding, y + padding, x + size - padding, y + padding + r);
+        ctx.lineTo(x + size - padding, y + size - padding - r);
+        ctx.quadraticCurveTo(x + size - padding, y + size - padding, x + size - padding - r, y + size - padding);
+        ctx.lineTo(x + padding + r, y + size - padding);
+        ctx.quadraticCurveTo(x + padding, y + size - padding, x + padding, y + size - padding - r);
+        ctx.lineTo(x + padding, y + padding + r);
+        ctx.quadraticCurveTo(x + padding, y + padding, x + padding + r, y + padding);
+        ctx.closePath();
+        ctx.fill();
 
-      // ハイライト / Highlight
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
-      ctx.fillRect(x + padding + 4, y + padding + 2, size / 2 - 8, 6);
+        // ハイライト / Highlight
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.fillRect(x + padding + 4, y + padding + 2, size / 2 - 8, 6);
 
-      // キャラクターの簡易顔（ミックス：ブロックごとに異なるキャラ）/ Mixed character face per block
-      this._drawCharacterFace(ctx, x + padding, y + padding, size - padding * 2, color, block.characterId);
+        // キャラクターの簡易顔（ミックス：ブロックごとに異なるキャラ）/ Mixed character face per block
+        this._drawCharacterFace(ctx, x + padding, y + padding, size - padding * 2, color, block.characterId);
 
-      // 枠線 / Border
-      ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
+        // 枠線 / Border
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
     }
 
     ctx.restore();
@@ -444,14 +510,22 @@ class Renderer {
       ctx.textBaseline = 'middle';
       ctx.fillText('⚠', x + size / 2, y + size / 2);
     } else {
-      const grad = ctx.createLinearGradient(x, y, x, y + size);
-      grad.addColorStop(0, color.hex);
-      grad.addColorStop(1, color.dark);
-      ctx.fillStyle = grad;
-      ctx.fillRect(x + padding, y + padding, size - padding * 2, size - padding * 2);
-      ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(x + padding, y + padding, size - padding * 2, size - padding * 2);
+      const tintedImg = this.maroBlockTinted[block.colorIndex];
+      if (tintedImg) {
+        // マロブロック画像で描画 / Draw with maro block image
+        ctx.drawImage(tintedImg, 0, 0, tintedImg.width, tintedImg.height,
+          x + padding, y + padding, size - padding * 2, size - padding * 2);
+      } else {
+        // フォールバック / Fallback
+        const grad = ctx.createLinearGradient(x, y, x, y + size);
+        grad.addColorStop(0, color.hex);
+        grad.addColorStop(1, color.dark);
+        ctx.fillStyle = grad;
+        ctx.fillRect(x + padding, y + padding, size - padding * 2, size - padding * 2);
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x + padding, y + padding, size - padding * 2, size - padding * 2);
+      }
     }
 
     ctx.restore();

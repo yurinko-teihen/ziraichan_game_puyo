@@ -47,6 +47,7 @@ const CONSTANTS = {
       name: '麻呂',
       nameEn: 'Maro',
       svg: 'assets/svg/maro.svg',
+      img: 'assets/img/maro_block.png',
       blockType: '地雷',
       description: '麻呂マイン'
     },

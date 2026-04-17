@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- マロブロック顔 / Maro block face -->
+  <!-- 丸い頭 / Round head -->
+  <circle cx="100" cy="105" r="90" fill="#d4a574"/>
+  <circle cx="100" cy="105" r="90" fill="none" stroke="#6d4c2a" stroke-width="2"/>
+  <!-- 頭のハイライト / Head highlight -->
+  <ellipse cx="80" cy="55" rx="45" ry="25" fill="rgba(255,220,180,0.5)"/>
+
+  <!-- 額のシワ / Forehead wrinkles -->
+  <path d="M55 55 Q75 48 95 55" fill="none" stroke="#8b6f4e" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M58 63 Q78 56 98 63" fill="none" stroke="#8b6f4e" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M62 71 Q80 65 100 71" fill="none" stroke="#8b6f4e" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M105 55 Q120 48 140 57" fill="none" stroke="#8b6f4e" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M102 63 Q118 56 138 64" fill="none" stroke="#8b6f4e" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M100 71 Q116 65 135 72" fill="none" stroke="#8b6f4e" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- 太い眉毛 / Thick eyebrows -->
+  <path d="M45 75 Q60 62 82 72" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"/>
+  <path d="M118 72 Q140 62 155 75" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"/>
+
+  <!-- 左目 / Left eye -->
+  <ellipse cx="70" cy="100" rx="20" ry="22" fill="#f5f5f0" stroke="#333" stroke-width="2"/>
+  <circle cx="72" cy="102" r="8" fill="#6b4226"/>
+  <circle cx="72" cy="102" r="4" fill="#1a1a1a"/>
+  <circle cx="68" cy="97" r="2.5" fill="#fff"/>
+
+  <!-- 右目 / Right eye -->
+  <ellipse cx="130" cy="100" rx="20" ry="22" fill="#f5f5f0" stroke="#333" stroke-width="2"/>
+  <circle cx="128" cy="102" r="8" fill="#6b4226"/>
+  <circle cx="128" cy="102" r="4" fill="#1a1a1a"/>
+  <circle cx="124" cy="97" r="2.5" fill="#fff"/>
+
+  <!-- 目の周りのシワ / Eye wrinkles -->
+  <path d="M48 90 Q55 88 58 92" fill="none" stroke="#8b6f4e" stroke-width="1" stroke-linecap="round"/>
+  <path d="M142 92 Q145 88 152 90" fill="none" stroke="#8b6f4e" stroke-width="1" stroke-linecap="round"/>
+
+  <!-- 鼻 / Nose -->
+  <path d="M95 110 Q100 125 105 110" fill="none" stroke="#8b6f4e" stroke-width="2" stroke-linecap="round"/>
+  <path d="M90 125 Q100 132 110 125" fill="none" stroke="#8b6f4e" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- 口 / Mouth - open laughing -->
+  <path d="M65 140 Q80 135 100 142 Q120 135 140 142 Q130 170 100 172 Q70 170 65 140 Z" fill="#2a1a0a" stroke="#1a1a1a" stroke-width="2"/>
+  <!-- 歯 / Teeth -->
+  <path d="M70 142 Q85 138 100 143 Q115 138 135 143 L133 152 Q115 148 100 152 Q85 148 72 152 Z" fill="#f5f0e0"/>
+  <!-- 舌 / Tongue -->
+  <ellipse cx="100" cy="162" rx="18" ry="10" fill="#d47a7a"/>
+
+  <!-- ほうれい線 / Nasolabial folds -->
+  <path d="M62 115 Q58 130 65 140" fill="none" stroke="#8b6f4e" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M138 115 Q142 130 140 142" fill="none" stroke="#8b6f4e" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- あごのシワ / Chin wrinkles -->
+  <path d="M80 178 Q100 182 120 178" fill="none" stroke="#8b6f4e" stroke-width="1" stroke-linecap="round"/>
+</svg>
