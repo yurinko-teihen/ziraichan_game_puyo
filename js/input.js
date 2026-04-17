@@ -9,6 +9,7 @@ class InputHandler {
     this.keyJustPressed = {};
     this.touchStartX = 0;
     this.touchStartY = 0;
+    this.touchStartTime = 0;
     this.touchAction = null;
     this.mouseClickPos = null;
 
@@ -40,6 +41,7 @@ class InputHandler {
         const touch = e.touches[0];
         this.touchStartX = touch.clientX;
         this.touchStartY = touch.clientY;
+        this.touchStartTime = performance.now();
       }, { passive: false });
 
       canvas.addEventListener('touchend', (e) => {
@@ -64,8 +66,18 @@ class InputHandler {
             };
           } else if (Math.abs(dx) > Math.abs(dy)) {
             this.touchAction = dx > 0 ? 'right' : 'left';
+          } else if (dy > 0) {
+            // 下スワイプ：速い/長いスワイプはハードドロップ、それ以外はソフトドロップ
+            // Fast/long swipe down = hard drop, otherwise soft drop
+            const elapsed = performance.now() - this.touchStartTime;
+            const speed = Math.abs(dy) / Math.max(elapsed, 1);
+            if (Math.abs(dy) > 100 || speed > 0.8) {
+              this.touchAction = 'hardDrop';
+            } else {
+              this.touchAction = 'down';
+            }
           } else {
-            this.touchAction = dy > 0 ? 'down' : 'rotate';
+            this.touchAction = 'rotate';
           }
         }
       }, { passive: false });

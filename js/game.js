@@ -205,6 +205,7 @@ class Game {
         case 'right': this._tryMove(1); break;
         case 'down': this._softDrop(); break;
         case 'rotate': this._tryRotate(true); break;
+        case 'hardDrop': this._hardDrop(); return; // return to skip auto-drop logic below
       }
     }
 
