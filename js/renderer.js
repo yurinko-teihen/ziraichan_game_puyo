@@ -139,7 +139,7 @@ class Renderer {
     );
 
     // スクロールするテキスト / Scrolling text
-    ctx.fillStyle = 'rgba(255, 255, 100, 0.15)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
     ctx.font = '12px "MS Gothic", monospace';
     ctx.textAlign = 'left';
 
@@ -274,9 +274,11 @@ class Renderer {
       // 通常ブロック / Normal block
       const tintedImg = this.maroBlockTinted[block.colorIndex];
       if (tintedImg) {
-        // マロブロック画像で描画 / Draw with maro block image
+        // マロブロック画像で描画（1.2倍）/ Draw with maro block image (1.2x)
+        const drawSize = size * 1.2;
+        const drawOffset = (size - drawSize) / 2;
         ctx.drawImage(tintedImg, 0, 0, tintedImg.width, tintedImg.height,
-          x + padding, y + padding, size - padding * 2, size - padding * 2);
+          x + drawOffset, y + drawOffset, drawSize, drawSize);
       } else {
         // フォールバック：従来の描画 / Fallback: legacy drawing
         const grad = ctx.createLinearGradient(x, y, x, y + size);
@@ -514,9 +516,11 @@ class Renderer {
     } else {
       const tintedImg = this.maroBlockTinted[block.colorIndex];
       if (tintedImg) {
-        // マロブロック画像で描画 / Draw with maro block image
+        // マロブロック画像で描画（1.2倍）/ Draw with maro block image (1.2x)
+        const drawSize = size * 1.2;
+        const drawOffset = (size - drawSize) / 2;
         ctx.drawImage(tintedImg, 0, 0, tintedImg.width, tintedImg.height,
-          x + padding, y + padding, size - padding * 2, size - padding * 2);
+          x + drawOffset, y + drawOffset, drawSize, drawSize);
       } else {
         // フォールバック / Fallback
         const grad = ctx.createLinearGradient(x, y, x, y + size);
