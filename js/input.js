@@ -51,8 +51,17 @@ class InputHandler {
           const threshold = 30;
 
           if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) {
-            // タップ = 回転
+            // タップ = ゲーム中は回転、タイトル/終了画面ではクリック扱い
+            // touchAction はゲーム中のみ使用、mouseClickPos は画面選択に使用
             this.touchAction = 'rotate';
+            // タッチタップをクリックとしても処理 / Treat touch tap as click
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            this.mouseClickPos = {
+              x: (touch.clientX - rect.left) * scaleX,
+              y: (touch.clientY - rect.top) * scaleY
+            };
           } else if (Math.abs(dx) > Math.abs(dy)) {
             this.touchAction = dx > 0 ? 'right' : 'left';
           } else {
