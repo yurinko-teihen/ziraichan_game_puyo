@@ -3,6 +3,9 @@
  * 落下ペアとブロック状態の管理
  */
 
+// キャラクターIDの一覧をキャッシュ / Cache character ID list
+const CHARACTER_KEYS = Object.keys(CONSTANTS.CHARACTERS);
+
 class Block {
   /**
    * @param {number} colorIndex - CONSTANTS.COLORSのインデックス
@@ -15,6 +18,8 @@ class Block {
     this.isStone = isStone;
     this.isClearing = false;
     this.clearTimer = 0;
+    // ミックスデザイン：各ブロックにランダムなキャラクターを割り当て
+    this.characterId = CHARACTER_KEYS[Math.floor(Math.random() * CHARACTER_KEYS.length)];
   }
 
   get color() {
@@ -34,6 +39,7 @@ class Block {
     const b = new Block(this.colorIndex, this.isSpecial, this.isStone);
     b.isClearing = this.isClearing;
     b.clearTimer = this.clearTimer;
+    b.characterId = this.characterId;
     return b;
   }
 }
