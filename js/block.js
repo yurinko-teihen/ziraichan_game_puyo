@@ -15,6 +15,9 @@ class Block {
     this.isStone = isStone;
     this.isClearing = false;
     this.clearTimer = 0;
+    // ミックスデザイン：各ブロックにランダムなキャラクターを割り当て
+    const charKeys = Object.keys(CONSTANTS.CHARACTERS);
+    this.characterId = charKeys[Math.floor(Math.random() * charKeys.length)];
   }
 
   get color() {
@@ -34,6 +37,7 @@ class Block {
     const b = new Block(this.colorIndex, this.isSpecial, this.isStone);
     b.isClearing = this.isClearing;
     b.clearTimer = this.clearTimer;
+    b.characterId = this.characterId;
     return b;
   }
 }

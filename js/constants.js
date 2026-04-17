@@ -135,7 +135,6 @@ const CONSTANTS = {
   // ゲーム状態 / Game states
   STATE: {
     TITLE: 'title',
-    CHARACTER_SELECT: 'character_select',
     PLAYING: 'playing',
     CHAIN_ANIMATION: 'chain_animation',
     GAME_OVER: 'game_over',

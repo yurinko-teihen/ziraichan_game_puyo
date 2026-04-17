@@ -19,7 +19,6 @@ class Game {
     this.combo = 0;
     this.totalBlocksCleared = 0;
     this.lastScoreLoss = 0;
-    this.selectedCharacter = null;
     this.isPaused = false;
 
     // 落下ペア / Current falling pair
@@ -63,16 +62,15 @@ class Game {
     }
 
     // 仮レンダラー（タイトル画面用） / Temp renderer for title
-    this.renderer = new Renderer(canvas, 'maro');
+    this.renderer = new Renderer(canvas);
     this.lastTime = performance.now();
     this._gameLoop(this.lastTime);
   }
 
   /**
-   * キャラ選択してゲーム開始 / Select character and start
+   * ゲーム開始 / Start game (キャラ選択なし)
    */
-  startGame(characterId) {
-    this.selectedCharacter = characterId;
+  startGame() {
     this.board = new Board();
     this.pieceGenerator = new PieceGenerator();
     this.score = CONSTANTS.INITIAL_SCORE;
@@ -88,7 +86,7 @@ class Game {
     this.pendingGravity = false;
 
     const canvas = document.getElementById('gameCanvas');
-    this.renderer = new Renderer(canvas, characterId);
+    this.renderer = new Renderer(canvas);
 
     this.currentPair = this.pieceGenerator.getNext();
     this.state = CONSTANTS.STATE.PLAYING;
@@ -145,34 +143,28 @@ class Game {
    * タイトル画面更新 / Update title screen
    */
   _updateTitle(dt) {
-    // 数字キーでキャラ選択
-    const charKeys = Object.keys(CONSTANTS.CHARACTERS);
-    for (let i = 0; i < charKeys.length; i++) {
-      if (this.input.isJustPressed([String(i + 1)])) {
-        this.input.getTouchAction(); // 未消費のタッチアクションをクリア
-        this.startGame(charKeys[i]);
-        return;
-      }
+    // Enterキーでスタート
+    if (this.input.isJustPressed(['Enter'])) {
+      this.input.getTouchAction();
+      this.startGame();
+      return;
     }
 
-    // マウスクリック/タッチタップでキャラ選択
+    // マウスクリック/タッチタップでスタートボタン判定
     const click = this.input.getMouseClick();
     if (click) {
       const w = this.renderer.canvas.width;
       const h = this.renderer.canvas.height;
-      const buttonWidth = 80;
-      const totalWidth = charKeys.length * buttonWidth + (charKeys.length - 1) * 10;
-      const startX = (w - totalWidth) / 2;
-      const by = h * 0.5;
+      const btnW = 200;
+      const btnH = 60;
+      const btnX = (w - btnW) / 2;
+      const btnY = h * 0.5 - btnH / 2;
 
-      for (let i = 0; i < charKeys.length; i++) {
-        const bx = startX + i * (buttonWidth + 10);
-        if (click.x >= bx && click.x <= bx + buttonWidth &&
-            click.y >= by && click.y <= by + 100) {
-          this.input.getTouchAction(); // 未消費のタッチアクションをクリア
-          this.startGame(charKeys[i]);
-          return;
-        }
+      if (click.x >= btnX && click.x <= btnX + btnW &&
+          click.y >= btnY && click.y <= btnY + btnH) {
+        this.input.getTouchAction();
+        this.startGame();
+        return;
       }
     }
 
@@ -553,7 +545,6 @@ class Game {
         r.drawNext(this.pieceGenerator ? this.pieceGenerator.peekNext() : []);
         r.drawScore(this.score, this.combo, this.level, this.lastScoreLoss);
         r.drawFillMeter(this.board.getFillRatio());
-        r.drawCharacterInfo(this.selectedCharacter);
 
         if (this.isPaused) {
           r.drawPauseScreen();

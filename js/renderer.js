@@ -6,12 +6,10 @@
 class Renderer {
   /**
    * @param {HTMLCanvasElement} canvas
-   * @param {string} selectedCharacter - キャラクターID
    */
-  constructor(canvas, selectedCharacter) {
+  constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    this.character = selectedCharacter;
     this.svgCache = {};
     this.bgTextY = 0;
     this.bgTextIndex = 0;
@@ -238,8 +236,8 @@ class Renderer {
       ctx.fillStyle = 'rgba(255,255,255,0.3)';
       ctx.fillRect(x + padding + 4, y + padding + 2, size / 2 - 8, 6);
 
-      // キャラクターの簡易顔 / Simple character face
-      this._drawCharacterFace(ctx, x + padding, y + padding, size - padding * 2, color);
+      // キャラクターの簡易顔（ミックス：ブロックごとに違うキャラ）/ Mixed character face per block
+      this._drawCharacterFace(ctx, x + padding, y + padding, size - padding * 2, color, block.characterId);
 
       // 枠線 / Border
       ctx.strokeStyle = 'rgba(0,0,0,0.3)';
@@ -252,11 +250,12 @@ class Renderer {
 
   /**
    * キャラクター顔を描画 / Draw character face on block
+   * @param {string} [charId] - ブロックごとのキャラクターID
    */
-  _drawCharacterFace(ctx, x, y, size, color) {
+  _drawCharacterFace(ctx, x, y, size, color, charId) {
     const cx = x + size / 2;
     const cy = y + size / 2 + 4;
-    const charId = this.character;
+    if (!charId) charId = 'maro'; // fallback
 
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
 
@@ -630,45 +629,34 @@ class Renderer {
     ctx.font = 'bold 24px sans-serif';
     ctx.fillText('〜底辺ぷよぷよ〜', w / 2, h * 0.33);
 
-    // キャラ選択タイトル / Character select title
+    // スタートボタン / Start button
+    const btnW = 200;
+    const btnH = 60;
+    const btnX = (w - btnW) / 2;
+    const btnY = h * 0.5 - btnH / 2;
+
+    ctx.fillStyle = 'rgba(255,68,68,0.8)';
+    ctx.strokeStyle = '#ff4444';
+    ctx.lineWidth = 3;
+    // 角丸ボタン / Rounded button
+    const r = 12;
+    ctx.beginPath();
+    ctx.moveTo(btnX + r, btnY);
+    ctx.lineTo(btnX + btnW - r, btnY);
+    ctx.quadraticCurveTo(btnX + btnW, btnY, btnX + btnW, btnY + r);
+    ctx.lineTo(btnX + btnW, btnY + btnH - r);
+    ctx.quadraticCurveTo(btnX + btnW, btnY + btnH, btnX + btnW - r, btnY + btnH);
+    ctx.lineTo(btnX + r, btnY + btnH);
+    ctx.quadraticCurveTo(btnX, btnY + btnH, btnX, btnY + btnH - r);
+    ctx.lineTo(btnX, btnY + r);
+    ctx.quadraticCurveTo(btnX, btnY, btnX + r, btnY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 18px sans-serif';
-    ctx.fillText('キャラクターを選んでね', w / 2, h * 0.45);
-
-    // キャラクターボタン / Character buttons
-    const chars = Object.entries(CONSTANTS.CHARACTERS);
-    const buttonWidth = 80;
-    const totalWidth = chars.length * buttonWidth + (chars.length - 1) * 10;
-    const startX = (w - totalWidth) / 2;
-
-    for (let i = 0; i < chars.length; i++) {
-      const [id, char] = chars[i];
-      const bx = startX + i * (buttonWidth + 10);
-      const by = h * 0.5;
-
-      // ボタン背景 / Button background
-      ctx.fillStyle = 'rgba(255,255,255,0.1)';
-      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-      ctx.lineWidth = 2;
-      ctx.fillRect(bx, by, buttonWidth, 100);
-      ctx.strokeRect(bx, by, buttonWidth, 100);
-
-      // キャラ名 / Character name
-      ctx.fillStyle = CONSTANTS.COLORS[i % CONSTANTS.COLORS.length].hex;
-      ctx.font = 'bold 14px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(char.name, bx + buttonWidth / 2, by + 30);
-
-      // ブロックタイプ / Block type
-      ctx.fillStyle = '#aaa';
-      ctx.font = '11px sans-serif';
-      ctx.fillText(char.blockType, bx + buttonWidth / 2, by + 50);
-
-      // 番号 / Number
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 20px sans-serif';
-      ctx.fillText(String(i + 1), bx + buttonWidth / 2, by + 80);
-    }
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillText('START', w / 2, btnY + btnH / 2 + 10);
 
     // 操作説明 / Controls (PC & モバイル対応)
     ctx.fillStyle = '#888';
@@ -678,11 +666,11 @@ class Renderer {
     // モバイル判定 / Detect mobile
     const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     if (isMobile) {
-      ctx.fillText('キャラクターをタップして選択！', w / 2, h * 0.85);
+      ctx.fillText('STARTをタップしてゲーム開始！', w / 2, h * 0.85);
       ctx.fillText('画面下のボタンで操作できるよ', w / 2, h * 0.9);
     } else {
       ctx.fillText('← → : 移動　↑ : 回転　↓ : 高速落下　Space : ハードドロップ', w / 2, h * 0.85);
-      ctx.fillText('数字キー 1-5 でキャラ選択 / クリックでも選択可能', w / 2, h * 0.9);
+      ctx.fillText('STARTをクリック or Enterキーでゲーム開始', w / 2, h * 0.9);
     }
   }
 
@@ -780,24 +768,4 @@ class Renderer {
     ctx.fillText('Pキー or ESCで再開', w / 2, h / 2 + 30);
   }
 
-  /**
-   * キャラクター名表示 / Draw character name
-   * @param {string} charId
-   */
-  drawCharacterInfo(charId) {
-    const ctx = this.ctx;
-    const char = CONSTANTS.CHARACTERS[charId];
-    if (!char) return;
-
-    const x = this.boardX + CONSTANTS.COLS * this.cellSize + 20;
-    const y = this.boardY + 350;
-
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 14px sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText(char.name, x, y);
-    ctx.fillStyle = '#aaa';
-    ctx.font = '11px sans-serif';
-    ctx.fillText(char.description, x, y + 18);
-  }
 }
