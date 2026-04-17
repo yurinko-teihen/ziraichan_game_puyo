@@ -37,6 +37,14 @@ class Renderer {
     this.canvas.width = 480;
     this.canvas.height = 770;
 
+    // タイトルボタンレイアウト / Title button layout (shared with game.js hit detection)
+    this.titleBtnW = 220;
+    this.titleBtnH = 56;
+    this.titleBtnYRatio = 0.45;
+
+    // モバイル判定キャッシュ / Mobile detection cache
+    this._isMobile = null;
+
     this._initBgTexts();
   }
 
@@ -127,6 +135,16 @@ class Renderer {
     ctx.lineTo(x, y + r);
     ctx.quadraticCurveTo(x, y, x + r, y);
     ctx.closePath();
+  }
+
+  /**
+   * モバイル判定 / Check if running on mobile device
+   */
+  isMobile() {
+    if (this._isMobile === null) {
+      this._isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    }
+    return this._isMobile;
   }
 
   /** 画面クリア・モダン背景描画 / Clear screen with modern background */
@@ -266,8 +284,9 @@ class Renderer {
     ctx.textBaseline = 'top';
     ctx.fillText('スコア', panelX + panelW / 2, panelY + 8);
 
-    // スコア数値 / Score number (zero-padded, with commas)
-    const scoreStr = String(Math.max(0, score)).padStart(9, '0');
+    // スコア数値 / Score number (zero-padded to match initial score width, with commas)
+    const SCORE_DISPLAY_DIGITS = 9; // 100,000,000 (1億) = 9 digits
+    const scoreStr = String(Math.max(0, score)).padStart(SCORE_DISPLAY_DIGITS, '0');
     const formatted = scoreStr.replace(/(\d)(?=(\d{3})+$)/g, '$1,');
 
     ctx.fillStyle = '#FFFFFF';
@@ -830,7 +849,7 @@ class Renderer {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
 
-    const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isMobile = this.isMobile();
     if (isMobile) {
       ctx.fillText('右フリック: 右移動　　画面右側をタッチ: 右回転', centerX, y);
       ctx.fillText('左フリック: 左移動　　画面左側をタッチ: 左回転', centerX, y + 14);
@@ -952,10 +971,10 @@ class Renderer {
     ctx.stroke();
 
     // スタートボタン / Start button (modernized)
-    const btnW = 220;
-    const btnH = 56;
+    const btnW = this.titleBtnW;
+    const btnH = this.titleBtnH;
     const btnX = (w - btnW) / 2;
-    const btnY = h * 0.45 - btnH / 2;
+    const btnY = h * this.titleBtnYRatio - btnH / 2;
 
     ctx.save();
     ctx.shadowColor = 'rgba(211,47,47,0.4)';
@@ -1017,7 +1036,7 @@ class Renderer {
     ctx.font = '11px "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif';
     ctx.textAlign = 'center';
 
-    const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isMobile = this.isMobile();
     if (isMobile) {
       ctx.fillText('STARTをタップしてゲーム開始！', w / 2, h * 0.85);
       ctx.fillText('スワイプで移動、タップで回転', w / 2, h * 0.89);

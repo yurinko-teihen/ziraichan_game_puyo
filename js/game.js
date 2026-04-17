@@ -157,10 +157,10 @@ class Game {
     if (click) {
       const w = this.renderer.canvas.width;
       const h = this.renderer.canvas.height;
-      const btnW = 220;
-      const btnH = 56;
+      const btnW = this.renderer.titleBtnW;
+      const btnH = this.renderer.titleBtnH;
       const btnX = (w - btnW) / 2;
-      const btnY = h * 0.45 - btnH / 2;
+      const btnY = h * this.renderer.titleBtnYRatio - btnH / 2;
 
       if (click.x >= btnX && click.x <= btnX + btnW &&
           click.y >= btnY && click.y <= btnY + btnH) {
