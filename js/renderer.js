@@ -58,6 +58,9 @@ class Renderer {
         this.maroBlockImg = svgImg;
         this._generateTintedImages();
       };
+      svgImg.onerror = () => {
+        console.warn('マロブロック画像のロードに失敗 / Failed to load maro block image');
+      };
       svgImg.src = 'assets/img/maro_block.svg';
     };
     img.src = 'assets/img/maro_block.png';
@@ -70,11 +73,10 @@ class Renderer {
   _generateTintedImages() {
     if (!this.maroBlockImg) return;
 
-    const sizes = [this.cellSize, Math.round(this.cellSize * 0.8), Math.round(this.cellSize * 0.6)];
+    const size = this.cellSize;
 
     CONSTANTS.COLORS.forEach((color, index) => {
       const canvas = document.createElement('canvas');
-      const size = Math.max(...sizes);
       canvas.width = size;
       canvas.height = size;
       const tCtx = canvas.getContext('2d');
