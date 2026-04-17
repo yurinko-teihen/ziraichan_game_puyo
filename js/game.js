@@ -17,6 +17,7 @@ class Game {
     this.level = 1;
     this.linesCleared = 0;
     this.combo = 0;
+    this.maxCombo = 0;
     this.totalBlocksCleared = 0;
     this.lastScoreLoss = 0;
     this.isPaused = false;
@@ -77,6 +78,7 @@ class Game {
     this.level = 1;
     this.linesCleared = 0;
     this.combo = 0;
+    this.maxCombo = 0;
     this.totalBlocksCleared = 0;
     this.lastScoreLoss = 0;
     this.dropInterval = CONSTANTS.INITIAL_DROP_INTERVAL;
@@ -155,10 +157,10 @@ class Game {
     if (click) {
       const w = this.renderer.canvas.width;
       const h = this.renderer.canvas.height;
-      const btnW = 200;
-      const btnH = 60;
+      const btnW = this.renderer.titleBtnW;
+      const btnH = this.renderer.titleBtnH;
       const btnX = (w - btnW) / 2;
-      const btnY = h * 0.5 - btnH / 2;
+      const btnY = h * this.renderer.titleBtnYRatio - btnH / 2;
 
       if (click.x >= btnX && click.x <= btnX + btnW &&
           click.y >= btnY && click.y <= btnY + btnH) {
@@ -381,6 +383,9 @@ class Game {
     const chains = this.board.findChains();
     if (chains.length > 0) {
       this.combo++;
+      if (this.combo > this.maxCombo) {
+        this.maxCombo = this.combo;
+      }
       this.chainsToProcess = chains;
 
       // スコア計算 / Score calculation
@@ -518,6 +523,39 @@ class Game {
   }
 
   /**
+   * ゲームボード共通描画 / Common game board drawing
+   * @param {number} dt
+   * @param {boolean} drawFalling - 落下中のペアを描画するか
+   */
+  _drawGameBoard(dt, drawFalling) {
+    const r = this.renderer;
+
+    // UIパネル（シェイクの影響を受けない） / UI panels (not affected by shake)
+    r.drawStatsBar(this.maxCombo, this.totalBlocksCleared);
+    r.drawScorePanel(this.score);
+
+    // ボードコンテンツ（シェイク適用） / Board content (with shake)
+    r.ctx.save();
+    r.applyShake();
+    r.drawBackground(dt);
+    r.drawGrid();
+    r.drawBoard(this.board);
+    if (drawFalling && this.currentPair) {
+      r.drawFallingPair(this.currentPair);
+    }
+    r.drawParticles(dt);
+    r.drawFlash();
+    r.ctx.restore();
+
+    // フレームとサイドパネル（シェイクの影響を受けない） / Frame & side panels
+    r.drawBoardFrame();
+    r.drawNext(this.pieceGenerator ? this.pieceGenerator.peekNext() : []);
+    r.drawLevelBadge(this.level);
+    r.drawFillMeter(this.board.getFillRatio());
+    r.drawControlsHint();
+  }
+
+  /**
    * 描画 / Draw
    */
   _draw(dt) {
@@ -531,20 +569,8 @@ class Game {
 
       case CONSTANTS.STATE.PLAYING:
       case CONSTANTS.STATE.CHAIN_ANIMATION:
-        r.ctx.save();
-        r.applyShake();
-        r.drawBackground(dt);
-        r.drawGrid();
-        r.drawBoard(this.board);
-        if (this.state === CONSTANTS.STATE.PLAYING) {
-          r.drawFallingPair(this.currentPair);
-        }
-        r.drawParticles(dt);
-        r.drawFlash();
-        r.ctx.restore();
-        r.drawNext(this.pieceGenerator ? this.pieceGenerator.peekNext() : []);
-        r.drawScore(this.score, this.combo, this.level, this.lastScoreLoss);
-        r.drawFillMeter(this.board.getFillRatio());
+        this._drawGameBoard(dt, this.state === CONSTANTS.STATE.PLAYING);
+        r.drawComboOverlay(this.combo, this.lastScoreLoss);
 
         if (this.isPaused) {
           r.drawPauseScreen();
@@ -552,20 +578,12 @@ class Game {
         break;
 
       case CONSTANTS.STATE.GAME_OVER:
-        r.ctx.save();
-        r.drawBackground(dt);
-        r.drawGrid();
-        r.drawBoard(this.board);
-        r.ctx.restore();
+        this._drawGameBoard(dt, false);
         r.drawGameOverScreen(this.score);
         break;
 
       case CONSTANTS.STATE.WIN:
-        r.ctx.save();
-        r.drawBackground(dt);
-        r.drawGrid();
-        r.drawBoard(this.board);
-        r.ctx.restore();
+        this._drawGameBoard(dt, false);
         r.drawWinScreen(this.score);
         break;
     }

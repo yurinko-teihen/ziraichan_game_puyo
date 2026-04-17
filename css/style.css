@@ -1,5 +1,6 @@
 /* =================================
    地雷ちゃんパズルゲーム - スタイル
+   モダンぷよぷよ風UI
    ================================= */
 
 * {
@@ -12,8 +13,8 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #0a0a1a;
-  font-family: 'Segoe UI', 'Hiragino Sans', 'MS Gothic', sans-serif;
+  background: linear-gradient(180deg, #4FC3F7 0%, #81D4FA 40%, #E0F7FA 100%);
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
   /* モバイルでダブルタップズームを防止 / Prevent double-tap zoom on mobile */
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -32,11 +33,9 @@ html, body {
 #gameCanvas {
   display: block;
   max-width: 100%;
-  max-height: calc(100vh - 60px);
-  image-rendering: pixelated;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  background: #0f0f23;
+  max-height: calc(100vh - 50px);
+  border-radius: 18px;
+  background: transparent;
   /* モバイルでのタッチ操作最適化 / Optimize touch for mobile */
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
@@ -50,38 +49,43 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  padding: 10px;
+  gap: 16px;
+  padding: 8px 16px;
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
 }
 
 #controlBar button {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ccc;
-  padding: 6px 14px;
-  font-size: 13px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(21, 101, 192, 0.2);
+  color: #1565C0;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.2s;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-family: 'Segoe UI', 'Hiragino Sans', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 #controlBar button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: #FFFFFF;
+  border-color: rgba(21, 101, 192, 0.4);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 }
 
 #controlBar .game-title {
-  color: #ff4444;
+  color: #D32F2F;
   font-size: 14px;
   font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* モバイル判定 / Mobile detection */
 @media (max-width: 768px), (hover: none) and (pointer: coarse) {
   #gameCanvas {
-    max-height: calc(100vh - 60px);
+    max-height: calc(100vh - 50px);
   }
 }
 
