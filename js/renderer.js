@@ -236,7 +236,7 @@ class Renderer {
       ctx.fillStyle = 'rgba(255,255,255,0.3)';
       ctx.fillRect(x + padding + 4, y + padding + 2, size / 2 - 8, 6);
 
-      // キャラクターの簡易顔（ミックス：ブロックごとに違うキャラ）/ Mixed character face per block
+      // キャラクターの簡易顔（ミックス：ブロックごとに異なるキャラ）/ Mixed character face per block
       this._drawCharacterFace(ctx, x + padding, y + padding, size - padding * 2, color, block.characterId);
 
       // 枠線 / Border
@@ -252,10 +252,9 @@ class Renderer {
    * キャラクター顔を描画 / Draw character face on block
    * @param {string} [charId] - ブロックごとのキャラクターID
    */
-  _drawCharacterFace(ctx, x, y, size, color, charId) {
+  _drawCharacterFace(ctx, x, y, size, color, charId = 'maro') {
     const cx = x + size / 2;
     const cy = y + size / 2 + 4;
-    if (!charId) charId = 'maro'; // fallback
 
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
 
