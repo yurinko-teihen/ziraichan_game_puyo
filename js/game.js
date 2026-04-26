@@ -396,7 +396,7 @@ class Game {
         uniqueColors.add(chain.colorIndex);
       }
 
-      // 消したブロック数 × 基本点 × 連鎖ボーナス × 色数ボーナス
+      // 消したブロック数 × 基本点 × コンボ倍率 × 色数ボーナス
       const colorBonus = uniqueColors.size > 1 ? uniqueColors.size : 1;
       const comboBonus = Math.max(1, this.combo * CONSTANTS.COMBO_MULTIPLIER);
       const scoreGain = totalBlocks * CONSTANTS.BASE_SCORE_GAIN * comboBonus * colorBonus;

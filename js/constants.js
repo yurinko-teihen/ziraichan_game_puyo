@@ -10,7 +10,7 @@ const CONSTANTS = {
   VISIBLE_ROWS: 12,
   CELL_SIZE: 48,
 
-  // 初期スコア / Initial score
+  // 初期スコア（加算式スコアの開始値） / Initial score for gain-based scoring
   INITIAL_SCORE: 0,
 
   // スコア加算 / Score gain
