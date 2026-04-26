@@ -398,7 +398,7 @@ class Game {
 
       // 消したブロック数 × 基本点 × コンボ倍率 × 色数ボーナス
       const colorBonus = uniqueColors.size > 1 ? uniqueColors.size : 1;
-      const comboBonus = Math.max(1, this.combo * CONSTANTS.COMBO_MULTIPLIER);
+      const comboBonus = Math.max(1, 1 + (this.combo - 1) * CONSTANTS.COMBO_MULTIPLIER);
       const scoreGain = totalBlocks * CONSTANTS.BASE_SCORE_GAIN * comboBonus * colorBonus;
       this.score += scoreGain;
       this.lastScoreDelta = scoreGain;

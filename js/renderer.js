@@ -285,7 +285,7 @@ class Renderer {
     ctx.fillText('スコア', panelX + panelW / 2, panelY + 8);
 
     // スコア数値 / Score number
-    const formatted = Math.max(0, Math.floor(score)).toLocaleString();
+    const formatted = Math.max(0, score).toLocaleString();
 
     ctx.fillStyle = '#FFFFFF';
     ctx.font = 'bold 28px "Courier New", "Lucida Console", monospace';
