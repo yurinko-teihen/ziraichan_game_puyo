@@ -15,7 +15,7 @@ const CONSTANTS = {
 
   // スコア加算 / Score gain
   BASE_SCORE_GAIN: 100,
-  COMBO_BONUS_INCREMENT: 2,
+  COMBO_BONUS_INCREMENT: 1,
 
   // ゲーム速度 / Game speed (ms)
   INITIAL_DROP_INTERVAL: 800,
@@ -90,6 +90,10 @@ const CONSTANTS = {
     { name: 'オレンジ', nameEn: 'orange', hex: '#ff8844', dark: '#cc5500' },
     { name: '紫', nameEn: 'purple', hex: '#aa44ff', dark: '#7700cc' }
   ],
+
+  // UI色 / UI colors
+  SCORE_DELTA_POSITIVE_COLOR: '#81C784',
+  SCORE_DELTA_NEGATIVE_COLOR: '#FF8A80',
 
   // 4方向 / 4 directions (orthogonal only)
   DIRECTIONS: [
