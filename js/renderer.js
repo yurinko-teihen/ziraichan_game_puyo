@@ -284,10 +284,8 @@ class Renderer {
     ctx.textBaseline = 'top';
     ctx.fillText('スコア', panelX + panelW / 2, panelY + 8);
 
-    // スコア数値 / Score number (zero-padded to match initial score width, with commas)
-    const SCORE_DISPLAY_DIGITS = 9; // 100,000,000 (1億) = 9 digits
-    const scoreStr = String(Math.max(0, score)).padStart(SCORE_DISPLAY_DIGITS, '0');
-    const formatted = scoreStr.replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+    // スコア数値 / Score number
+    const formatted = Math.max(0, score).toLocaleString();
 
     ctx.fillStyle = '#FFFFFF';
     ctx.font = 'bold 28px "Courier New", "Lucida Console", monospace';
@@ -767,7 +765,7 @@ class Renderer {
   /**
    * コンボオーバーレイ描画 / Draw combo overlay on board
    */
-  drawComboOverlay(combo, scoreLoss) {
+  drawComboOverlay(combo, scoreDelta) {
     if (combo <= 0) return;
 
     const ctx = this.ctx;
@@ -784,11 +782,14 @@ class Renderer {
     ctx.fillText(combo + ' COMBO!', boardCenterX, this.boardY - 10);
     ctx.restore();
 
-    // スコア減少表示 / Score loss display
-    ctx.fillStyle = '#FF8A80';
+    // スコア変動表示 / Score delta display
+    ctx.fillStyle = scoreDelta >= 0
+      ? CONSTANTS.SCORE_DELTA_POSITIVE_COLOR
+      : CONSTANTS.SCORE_DELTA_NEGATIVE_COLOR;
     ctx.font = 'bold 11px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('-' + scoreLoss.toLocaleString() + 'pts', boardCenterX, this.boardY - 28);
+    const sign = scoreDelta >= 0 ? '+' : '-';
+    ctx.fillText(sign + Math.abs(scoreDelta).toLocaleString() + 'pts', boardCenterX, this.boardY - 28);
   }
 
   /**

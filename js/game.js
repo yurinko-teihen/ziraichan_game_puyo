@@ -19,7 +19,7 @@ class Game {
     this.combo = 0;
     this.maxCombo = 0;
     this.totalBlocksCleared = 0;
-    this.lastScoreLoss = 0;
+    this.lastScoreDelta = 0;
     this.isPaused = false;
 
     // 落下ペア / Current falling pair
@@ -80,7 +80,7 @@ class Game {
     this.combo = 0;
     this.maxCombo = 0;
     this.totalBlocksCleared = 0;
-    this.lastScoreLoss = 0;
+    this.lastScoreDelta = 0;
     this.dropInterval = CONSTANTS.INITIAL_DROP_INTERVAL;
     this.isPaused = false;
     this.isAnimatingClear = false;
@@ -396,11 +396,12 @@ class Game {
         uniqueColors.add(chain.colorIndex);
       }
 
-      // 消したブロック数 × 100 × コンボ数 × 色数ボーナス
+      // 消したブロック数 × 基本点 × コンボ倍率 × 色数ボーナス
       const colorBonus = uniqueColors.size > 1 ? uniqueColors.size : 1;
-      const scoreLoss = totalBlocks * CONSTANTS.BASE_SCORE_LOSS * this.combo * colorBonus;
-      this.score = Math.max(0, this.score - scoreLoss);
-      this.lastScoreLoss = scoreLoss;
+      const comboBonus = 1 + (this.combo - 1) * CONSTANTS.COMBO_BONUS_MULTIPLIER;
+      const scoreGain = totalBlocks * CONSTANTS.BASE_SCORE_GAIN * comboBonus * colorBonus;
+      this.score += scoreGain;
+      this.lastScoreDelta = scoreGain;
       this.totalBlocksCleared += totalBlocks;
 
       // レベルアップ
@@ -475,13 +476,6 @@ class Game {
    */
   _afterChainComplete() {
     this.state = CONSTANTS.STATE.PLAYING;
-
-    // 勝利判定 / Win check
-    if (this.board.isWin()) {
-      this.state = CONSTANTS.STATE.WIN;
-      this.sound.playWin();
-      return;
-    }
 
     // ゲームオーバー判定 / Game over check
     if (this.board.isGameOver()) {
@@ -570,7 +564,7 @@ class Game {
       case CONSTANTS.STATE.PLAYING:
       case CONSTANTS.STATE.CHAIN_ANIMATION:
         this._drawGameBoard(dt, this.state === CONSTANTS.STATE.PLAYING);
-        r.drawComboOverlay(this.combo, this.lastScoreLoss);
+        r.drawComboOverlay(this.combo, this.lastScoreDelta);
 
         if (this.isPaused) {
           r.drawPauseScreen();
