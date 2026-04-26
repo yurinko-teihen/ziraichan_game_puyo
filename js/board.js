@@ -93,10 +93,23 @@ class Board {
 
   /**
    * 重力適用 / Apply gravity
+   * 落下ブロックに fallOffsetY を設定してアニメーション可能にする
    * @returns {boolean} ブロックが移動したか
    */
   applyGravity() {
     let moved = false;
+
+    // 全ブロックの落下オフセットをリセット / Reset fall offsets on all blocks
+    for (let row = 0; row < CONSTANTS.ROWS; row++) {
+      for (let col = 0; col < CONSTANTS.COLS; col++) {
+        const block = this.grid[row][col];
+        if (block) {
+          block.fallOffsetY = 0;
+          block._fallStartY = 0;
+        }
+      }
+    }
+
     for (let col = 0; col < CONSTANTS.COLS; col++) {
       for (let row = CONSTANTS.ROWS - 2; row >= 0; row--) {
         if (this.grid[row][col] !== null && this.grid[row + 1][col] === null) {
@@ -105,13 +118,31 @@ class Board {
           while (targetRow + 1 < CONSTANTS.ROWS && this.grid[targetRow + 1][col] === null) {
             targetRow++;
           }
-          this.grid[targetRow][col] = this.grid[row][col];
+          const block = this.grid[row][col];
+          const fallDist = (targetRow - row) * CONSTANTS.CELL_SIZE;
+          block.fallOffsetY = fallDist;
+          block._fallStartY = fallDist;
+          this.grid[targetRow][col] = block;
           this.grid[row][col] = null;
           moved = true;
         }
       }
     }
     return moved;
+  }
+
+  /**
+   * 落下アニメーション中のブロックがあるか / Are any blocks still falling
+   * @returns {boolean}
+   */
+  hasFallingBlocks() {
+    for (let row = 0; row < CONSTANTS.ROWS; row++) {
+      for (let col = 0; col < CONSTANTS.COLS; col++) {
+        const block = this.grid[row][col];
+        if (block && block.fallOffsetY > 0) return true;
+      }
+    }
+    return false;
   }
 
   /**
