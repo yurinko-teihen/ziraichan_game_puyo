@@ -115,7 +115,7 @@ class Board {
   }
 
   /**
-   * 連鎖チェック（8方向） / Check chains (8-directional)
+   * 連鎖チェック（4方向） / Check chains (4-directional)
    * 同色の隣接ブロック群を検出
    * @returns {Array<Array>} 消去するグループのリスト
    */

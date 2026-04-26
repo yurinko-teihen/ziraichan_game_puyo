@@ -10,11 +10,11 @@ const CONSTANTS = {
   VISIBLE_ROWS: 12,
   CELL_SIZE: 48,
 
-  // 初期スコア / Initial score (10000万 = 1億)
-  INITIAL_SCORE: 100000000,
+  // 初期スコア / Initial score
+  INITIAL_SCORE: 0,
 
-  // スコア減算 / Score reduction
-  BASE_SCORE_LOSS: 100,
+  // スコア加算 / Score gain
+  BASE_SCORE_GAIN: 100,
   COMBO_MULTIPLIER: 2,
 
   // ゲーム速度 / Game speed (ms)
@@ -24,11 +24,11 @@ const CONSTANTS = {
   SOFT_DROP_SPEED: 50,
   LOCK_DELAY: 500,
 
-  // 連鎖最小数 / Minimum blocks for chain
-  MIN_CHAIN_SIZE: 2,
+  // 連鎖最小数 / Minimum blocks for chain (Puyo style)
+  MIN_CHAIN_SIZE: 4,
 
   // 特殊ブロック出現率 / Special block spawn rate
-  KICHIGAI_CHANCE: 0.05, // 5%
+  KICHIGAI_CHANCE: 0.0, // Disabled for standard puyo-like gameplay
 
   // アニメーション / Animation
   CLEAR_ANIMATION_DURATION: 500,
@@ -91,11 +91,11 @@ const CONSTANTS = {
     { name: '紫', nameEn: 'purple', hex: '#aa44ff', dark: '#7700cc' }
   ],
 
-  // 8方向 / 8 directions (including diagonals)
+  // 4方向 / 4 directions (orthogonal only)
   DIRECTIONS: [
-    { dx: -1, dy: -1 }, { dx: 0, dy: -1 }, { dx: 1, dy: -1 },
-    { dx: -1, dy: 0 },                       { dx: 1, dy: 0 },
-    { dx: -1, dy: 1 },  { dx: 0, dy: 1 },  { dx: 1, dy: 1 }
+    { dx: 0, dy: -1 },
+    { dx: -1, dy: 0 }, { dx: 1, dy: 0 },
+    { dx: 0, dy: 1 }
   ],
 
   // 背景会話テキスト / Background conversation texts
