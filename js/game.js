@@ -495,13 +495,13 @@ class Game {
     this.fallAnimTimer += dt;
     const progress = Math.min(1, this.fallAnimTimer / CONSTANTS.FALL_ANIMATION_DURATION);
     // 加速しながら落ちる ease-in / Ease-in: accelerating fall
-    const eased = progress * progress;
+    const easedFallProgress = progress * progress;
 
     for (let row = 0; row < CONSTANTS.ROWS; row++) {
       for (let col = 0; col < CONSTANTS.COLS; col++) {
         const block = this.board.grid[row][col];
         if (block && block._fallStartY > 0) {
-          block.fallOffsetY = block._fallStartY * (1 - eased);
+          block.fallOffsetY = block._fallStartY * (1 - easedFallProgress);
         }
       }
     }

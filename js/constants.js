@@ -34,6 +34,8 @@ const CONSTANTS = {
   CLEAR_ANIMATION_DURATION: 500,
   CHAIN_DELAY: 300,
   FALL_ANIMATION_DURATION: 250,
+  CLEAR_BLINK_THRESHOLD: 0.65,  // 点滅フェーズの割合 / Fraction of clear animation used for blinking
+  CLEAR_BLINK_FREQUENCY: 7,     // 点滅の速さ（サイクル数） / Blink cycles during blink phase
 
   // 背景テキスト / Background text
   BG_TEXT_SPEED: 0.5,

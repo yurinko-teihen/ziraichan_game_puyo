@@ -479,13 +479,14 @@ class Renderer {
 
     if (block.isClearing) {
       const progress = block.clearTimer;
-      if (progress < 0.65) {
+      const blinkThreshold = CONSTANTS.CLEAR_BLINK_THRESHOLD;
+      if (progress < blinkThreshold) {
         // 点滅フェーズ / Blink phase: rapid on/off
-        const blink = Math.abs(Math.sin(progress * Math.PI * 7));
+        const blink = Math.abs(Math.sin(progress * Math.PI * CONSTANTS.CLEAR_BLINK_FREQUENCY));
         ctx.globalAlpha = alpha * blink;
       } else {
         // フェードアウトフェーズ / Fade-out phase with scale-up
-        const fadeProgress = (progress - 0.65) / 0.35;
+        const fadeProgress = (progress - blinkThreshold) / (1 - blinkThreshold);
         ctx.globalAlpha = alpha * (1 - fadeProgress);
         const scale = 1 + fadeProgress * 0.35;
         ctx.translate(x + size / 2, y + size / 2);
