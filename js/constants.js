@@ -15,7 +15,7 @@ const CONSTANTS = {
 
   // スコア加算 / Score gain
   BASE_SCORE_GAIN: 100,
-  COMBO_MULTIPLIER: 2,
+  COMBO_BONUS_INCREMENT: 2,
 
   // ゲーム速度 / Game speed (ms)
   INITIAL_DROP_INTERVAL: 800,
