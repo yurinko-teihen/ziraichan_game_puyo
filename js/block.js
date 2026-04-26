@@ -18,6 +18,9 @@ class Block {
     this.isStone = isStone;
     this.isClearing = false;
     this.clearTimer = 0;
+    // 落下アニメーション用 / Fall animation
+    this.fallOffsetY = 0;   // 現在の落下アニメーションオフセット(px) / current fall pixel offset above destination
+    this._fallStartY = 0;   // 落下開始時のオフセット / offset at fall animation start
     // ミックスデザイン：各ブロックにランダムなキャラクターを割り当て
     this.characterId = CHARACTER_KEYS[Math.floor(Math.random() * CHARACTER_KEYS.length)];
   }
@@ -39,6 +42,8 @@ class Block {
     const b = new Block(this.colorIndex, this.isSpecial, this.isStone);
     b.isClearing = this.isClearing;
     b.clearTimer = this.clearTimer;
+    b.fallOffsetY = this.fallOffsetY;
+    b._fallStartY = this._fallStartY;
     b.characterId = this.characterId;
     return b;
   }

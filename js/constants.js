@@ -33,6 +33,7 @@ const CONSTANTS = {
   // アニメーション / Animation
   CLEAR_ANIMATION_DURATION: 500,
   CHAIN_DELAY: 300,
+  FALL_ANIMATION_DURATION: 250,
 
   // 背景テキスト / Background text
   BG_TEXT_SPEED: 0.5,
@@ -81,14 +82,14 @@ const CONSTANTS = {
     }
   },
 
-  // ブロック色定義 / Block color definitions
+  // ブロック色定義 / Block color definitions (pastel palette)
   COLORS: [
-    { name: '赤', nameEn: 'red', hex: '#ff4444', dark: '#cc0000' },
-    { name: '青', nameEn: 'blue', hex: '#4488ff', dark: '#0044cc' },
-    { name: '緑', nameEn: 'green', hex: '#44cc44', dark: '#008800' },
-    { name: '黄', nameEn: 'yellow', hex: '#ffdd44', dark: '#ccaa00' },
-    { name: 'オレンジ', nameEn: 'orange', hex: '#ff8844', dark: '#cc5500' },
-    { name: '紫', nameEn: 'purple', hex: '#aa44ff', dark: '#7700cc' }
+    { name: '赤', nameEn: 'red', hex: '#FF8888', dark: '#EE5555' },
+    { name: '青', nameEn: 'blue', hex: '#88AAFF', dark: '#5577EE' },
+    { name: '緑', nameEn: 'green', hex: '#77DD77', dark: '#44AA44' },
+    { name: '黄', nameEn: 'yellow', hex: '#FFEE77', dark: '#DDBB44' },
+    { name: 'オレンジ', nameEn: 'orange', hex: '#FFAA66', dark: '#EE7733' },
+    { name: '紫', nameEn: 'purple', hex: '#CC88FF', dark: '#9955EE' }
   ],
 
   // UI色 / UI colors
@@ -142,6 +143,7 @@ const CONSTANTS = {
     TITLE: 'title',
     PLAYING: 'playing',
     CHAIN_ANIMATION: 'chain_animation',
+    FALLING: 'falling',
     GAME_OVER: 'game_over',
     WIN: 'win'
   },

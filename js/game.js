@@ -31,6 +31,7 @@ class Game {
     this.lockTimer = 0;
     this.clearAnimTimer = 0;
     this.chainDelayTimer = 0;
+    this.fallAnimTimer = 0;
 
     // アニメーション状態 / Animation state
     this.chainsToProcess = [];
@@ -86,6 +87,7 @@ class Game {
     this.isAnimatingClear = false;
     this.chainsToProcess = [];
     this.pendingGravity = false;
+    this.fallAnimTimer = 0;
 
     const canvas = document.getElementById('gameCanvas');
     this.renderer = new Renderer(canvas);
@@ -133,6 +135,9 @@ class Game {
         break;
       case CONSTANTS.STATE.CHAIN_ANIMATION:
         this._updateChainAnimation(dt);
+        break;
+      case CONSTANTS.STATE.FALLING:
+        this._updateFalling(dt);
         break;
       case CONSTANTS.STATE.GAME_OVER:
       case CONSTANTS.STATE.WIN:
@@ -375,11 +380,24 @@ class Game {
 
   /**
    * 連鎖チェック開始 / Start chain checking
+   * 重力を適用し、落下アニメーションが必要なら FALLING 状態へ遷移する
    */
   _startChainCheck() {
-    // 重力適用
-    this.board.applyGravity();
+    const hasMoved = this.board.applyGravity();
 
+    if (hasMoved && this.board.hasFallingBlocks()) {
+      this.fallAnimTimer = 0;
+      this.state = CONSTANTS.STATE.FALLING;
+    } else {
+      this._doChainDetection();
+    }
+  }
+
+  /**
+   * 連鎖判定 / Detect and start clearing chains
+   * 重力適用・落下アニメーション後に呼ばれる
+   */
+  _doChainDetection() {
     const chains = this.board.findChains();
     if (chains.length > 0) {
       this.combo++;
@@ -464,10 +482,42 @@ class Game {
       this.chainsToProcess = [];
       this.isAnimatingClear = false;
 
-      // 次の連鎖チェック（ディレイ付き）
-      setTimeout(() => {
-        this._startChainCheck();
-      }, CONSTANTS.CHAIN_DELAY);
+      // 次の連鎖チェック（重力 → 落下アニメーション → 連鎖判定）
+      this._startChainCheck();
+    }
+  }
+
+  /**
+   * 落下アニメーション更新 / Update falling animation
+   * 消去後にブロックが落ちる演出
+   */
+  _updateFalling(dt) {
+    this.fallAnimTimer += dt;
+    const progress = Math.min(1, this.fallAnimTimer / CONSTANTS.FALL_ANIMATION_DURATION);
+    // 加速しながら落ちる ease-in / Ease-in: accelerating fall
+    const eased = progress * progress;
+
+    for (let row = 0; row < CONSTANTS.ROWS; row++) {
+      for (let col = 0; col < CONSTANTS.COLS; col++) {
+        const block = this.board.grid[row][col];
+        if (block && block._fallStartY > 0) {
+          block.fallOffsetY = block._fallStartY * (1 - eased);
+        }
+      }
+    }
+
+    if (progress >= 1) {
+      // 落下完了：オフセットをリセットして連鎖判定へ
+      for (let row = 0; row < CONSTANTS.ROWS; row++) {
+        for (let col = 0; col < CONSTANTS.COLS; col++) {
+          const block = this.board.grid[row][col];
+          if (block) {
+            block.fallOffsetY = 0;
+            block._fallStartY = 0;
+          }
+        }
+      }
+      this._doChainDetection();
     }
   }
 
@@ -563,6 +613,7 @@ class Game {
 
       case CONSTANTS.STATE.PLAYING:
       case CONSTANTS.STATE.CHAIN_ANIMATION:
+      case CONSTANTS.STATE.FALLING:
         this._drawGameBoard(dt, this.state === CONSTANTS.STATE.PLAYING);
         r.drawComboOverlay(this.combo, this.lastScoreDelta);
 

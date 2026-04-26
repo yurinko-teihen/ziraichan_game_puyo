@@ -461,7 +461,7 @@ class Renderer {
   }
 
   /**
-   * ブロック1つ描画 / Draw single block (UNCHANGED)
+   * ブロック1つ描画 / Draw single block
    */
   drawBlock(col, row, block, alpha = 1) {
     const visibleRow = row - 1;
@@ -469,7 +469,8 @@ class Renderer {
 
     const ctx = this.ctx;
     const x = this.boardX + col * this.cellSize;
-    const y = this.boardY + visibleRow * this.cellSize;
+    // 落下アニメーションオフセットを適用 / Apply fall animation offset
+    const y = this.boardY + visibleRow * this.cellSize - (block.fallOffsetY || 0);
     const size = this.cellSize;
     const padding = 2;
 
@@ -478,11 +479,19 @@ class Renderer {
 
     if (block.isClearing) {
       const progress = block.clearTimer;
-      ctx.globalAlpha = alpha * (1 - progress);
-      const scale = 1 + progress * 0.3;
-      ctx.translate(x + size / 2, y + size / 2);
-      ctx.scale(scale, scale);
-      ctx.translate(-(x + size / 2), -(y + size / 2));
+      if (progress < 0.65) {
+        // 点滅フェーズ / Blink phase: rapid on/off
+        const blink = Math.abs(Math.sin(progress * Math.PI * 7));
+        ctx.globalAlpha = alpha * blink;
+      } else {
+        // フェードアウトフェーズ / Fade-out phase with scale-up
+        const fadeProgress = (progress - 0.65) / 0.35;
+        ctx.globalAlpha = alpha * (1 - fadeProgress);
+        const scale = 1 + fadeProgress * 0.35;
+        ctx.translate(x + size / 2, y + size / 2);
+        ctx.scale(scale, scale);
+        ctx.translate(-(x + size / 2), -(y + size / 2));
+      }
     }
 
     const color = block.color;
@@ -521,6 +530,17 @@ class Renderer {
         const drawOffset = (size - drawSize) / 2;
         ctx.drawImage(tintedImg, 0, 0, tintedImg.width, tintedImg.height,
           x + drawOffset, y + drawOffset, drawSize, drawSize);
+
+        // 光沢オーバーレイ / Gloss overlay
+        const glossGrad = ctx.createRadialGradient(
+          x + size * 0.38, y + size * 0.22, 0,
+          x + size * 0.5, y + size * 0.5, size * 0.68
+        );
+        glossGrad.addColorStop(0, 'rgba(255,255,255,0.48)');
+        glossGrad.addColorStop(0.35, 'rgba(255,255,255,0.18)');
+        glossGrad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = glossGrad;
+        ctx.fillRect(x + drawOffset, y + drawOffset, drawSize, drawSize);
       } else {
         const grad = ctx.createLinearGradient(x, y, x, y + size);
         grad.addColorStop(0, color.hex);
@@ -541,8 +561,16 @@ class Renderer {
         ctx.closePath();
         ctx.fill();
 
-        ctx.fillStyle = 'rgba(255,255,255,0.3)';
-        ctx.fillRect(x + padding + 4, y + padding + 2, size / 2 - 8, 6);
+        // 光沢ハイライト / Gloss highlight
+        const glossGrad2 = ctx.createRadialGradient(
+          x + size * 0.38, y + size * 0.22, 0,
+          x + size * 0.5, y + size * 0.5, size * 0.65
+        );
+        glossGrad2.addColorStop(0, 'rgba(255,255,255,0.55)');
+        glossGrad2.addColorStop(0.4, 'rgba(255,255,255,0.18)');
+        glossGrad2.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = glossGrad2;
+        ctx.fillRect(x + padding, y + padding, size - padding * 2, size - padding * 2);
 
         this._drawCharacterFace(ctx, x + padding, y + padding, size - padding * 2, color, block.characterId);
 
@@ -643,9 +671,16 @@ class Renderer {
   }
 
   /**
-   * ボード全体描画 / Draw entire board (UNCHANGED)
+   * ボード全体描画 / Draw entire board
+   * ボードエリアにクリップして落下中ブロックがUIに重ならないようにする
    */
   drawBoard(board) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(this.boardX, this.boardY, this.boardWidth, this.boardHeight);
+    ctx.clip();
+
     for (let row = 1; row < CONSTANTS.ROWS; row++) {
       for (let col = 0; col < CONSTANTS.COLS; col++) {
         const block = board.grid[row][col];
@@ -654,6 +689,8 @@ class Renderer {
         }
       }
     }
+
+    ctx.restore();
   }
 
   /**
