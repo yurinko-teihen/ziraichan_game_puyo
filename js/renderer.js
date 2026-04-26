@@ -783,7 +783,7 @@ class Renderer {
     ctx.restore();
 
     // スコア変動表示 / Score delta display
-    ctx.fillStyle = '#FF8A80';
+    ctx.fillStyle = scoreDelta >= 0 ? '#81C784' : '#FF8A80';
     ctx.font = 'bold 11px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     const sign = scoreDelta >= 0 ? '+' : '-';
